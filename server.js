@@ -111,8 +111,9 @@ app.get('/api/cloudinary/products', async (req, res) => {
   try {
     console.log('🔄 Backend fetching productos desde Cloudinary...');
     
-    // SOLO productos de la carpeta 'products'
-    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/resources/image?max_results=100&prefix=products/`;
+    // ⚠️ FILTRO ELIMINADO: &prefix=products/
+    // Ahora cargará TODAS las imágenes de Cloudinary
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/resources/image?max_results=100`;
     
     const response = await fetch(cloudinaryUrl, {
       headers: {
@@ -121,7 +122,7 @@ app.get('/api/cloudinary/products', async (req, res) => {
     });
     
     const data = await response.json();
-    console.log(`✅ Backend obtuvo ${data.resources?.length || 0} productos de la app`);
+    console.log(`✅ Backend obtuvo ${data.resources?.length || 0} productos de Cloudinary`);
     res.json(data);
   } catch (error) {
     console.error('❌ Error backend fetching Cloudinary:', error);
