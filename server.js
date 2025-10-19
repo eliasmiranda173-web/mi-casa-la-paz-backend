@@ -113,7 +113,7 @@ app.get('/api/cloudinary/products', async (req, res) => {
     
     // ⚠️ FILTRO ELIMINADO: &prefix=products/
     // Ahora cargará TODAS las imágenes de Cloudinary
-    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/resources/image?max_results=100`;
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/resources/image?max_results=100&context=true`;
     
     const response = await fetch(cloudinaryUrl, {
       headers: {
@@ -137,3 +137,4 @@ app.listen(PORT, () => {
   console.log('   👥 Usuarios → MongoDB (25MB)');
   console.log('   🛍️ Productos → Cloudinary (25GB GRATIS)');
 });
+
