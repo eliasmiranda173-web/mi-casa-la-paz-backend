@@ -148,7 +148,24 @@ app.get('/api/cloudinary/products', async (req, res) => {
     res.status(500).json({ error: 'Error al cargar productos' });
   }
 });
+// 🔍🔍🔍 AGREGAR ESTO AL FINAL DE LAS RUTAS, ANTES DEL app.listen 🔍🔍🔍
 
+// RUTA PARA VER TODOS LOS USUARIOS (TEMPORAL)
+app.get('/api/all-users', async (req, res) => {
+  try {
+    const users = await User.find({}, { password: 0 }); // Excluir contraseñas
+    console.log(`📊 Mostrando ${users.length} usuarios`);
+    res.json({
+      total: users.length,
+      users: users
+    });
+  } catch (error) {
+    console.error('❌ Error obteniendo usuarios:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 🔍🔍🔍 HASTA AQUÍ 🔍🔍🔍
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor usuarios en: http://localhost:${PORT}`);
@@ -156,5 +173,6 @@ app.listen(PORT, () => {
   console.log('   👥 Usuarios → MongoDB (25MB)');
   console.log('   🛍️ Productos → Cloudinary (25GB GRATIS)');
 });
+
 
 
