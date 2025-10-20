@@ -15,7 +15,15 @@ app.use(express.json());
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ Conectado a MongoDB - Solo usuarios'))
   .catch((error) => console.error('❌ Error MongoDB:', error));
-
+// 🔍🔍🔍 AGREGAR ESTO JUSTO AQUÍ 🔍🔍🔍
+mongoose.connection.on('connected', () => {
+  console.log('🔍 INFORMACIÓN DE CONEXIÓN MONGODB:');
+  console.log('📌 Host:', mongoose.connection.host);
+  console.log('📌 Database:', mongoose.connection.db.databaseName);
+  console.log('📌 Port:', mongoose.connection.port);
+  console.log('📌 URI completa:', mongoose.connection.client.s.url);
+});
+// 🔍🔍🔍 HASTA AQUÍ 🔍🔍🔍
 // ESQUEMA SOLO PARA USUARIOS
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -34,7 +42,18 @@ app.get('/api/health', (req, res) => {
     storage: 'Productos en Cloudinary' 
   });
 });
-
+// 🔍🔍🔍 AGREGAR ESTA RUTA NUEVA 🔍🔍🔍
+app.get('/api/debug-db', (req, res) => {
+  const connection = mongoose.connection;
+  res.json({
+    host: connection.host,
+    databaseName: connection.db?.databaseName,
+    port: connection.port,
+    readyState: connection.readyState,
+    connectionURI: connection.client?.s?.url
+  });
+});
+// 🔍🔍🔍 HASTA AQUÍ 🔍🔍🔍
 // REGISTRO DE USUARIO
 app.post('/api/register', async (req, res) => {
   try {
@@ -137,4 +156,5 @@ app.listen(PORT, () => {
   console.log('   👥 Usuarios → MongoDB (25MB)');
   console.log('   🛍️ Productos → Cloudinary (25GB GRATIS)');
 });
+
 
